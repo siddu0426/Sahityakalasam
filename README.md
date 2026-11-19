@@ -1,10 +1,10 @@
-# Kathalu (కథలు) · Complete Telugu Audio Storytelling Platform
+# Kathalu (à°•à°¥à°²à±) Â· Complete Telugu Audio Storytelling Platform
 
-A warm, community-driven web application dedicated to authentic Telugu audio stories told by children and elders. Built with Next.js (App Router), TypeScript, Tailwind CSS, Supabase (PostgreSQL with RLS), Razorpay (₹20 entry fee test mode), and Progressive Web App (PWA) support.
+A warm, community-driven web application dedicated to authentic Telugu audio stories told by children and elders. Built with Next.js (App Router), TypeScript, Tailwind CSS, Supabase (PostgreSQL with RLS), Razorpay (â‚¹20 entry fee test mode), and Progressive Web App (PWA) support.
 
 ---
 
-## 📱 Visual & Responsive Design (Part A)
+## ðŸ“± Visual & Responsive Design (Part A)
 
 - **Phone-Ratio Column**: Centered with `max-width: 430px`, set against a soft neutral backdrop on wider screens (`#E8E5DF`).
 - **Color Palette**:
@@ -15,7 +15,7 @@ A warm, community-driven web application dedicated to authentic Telugu audio sto
   - Card Border: `#EFEBE4`
 - **Typography**:
   - Latin/English: `Inter`
-  - Telugu: `Noto Sans Telugu` with fluid line-height (`≥ 1.5 - 1.6`) to prevent text clipping
+  - Telugu: `Noto Sans Telugu` with fluid line-height (`â‰¥ 1.5 - 1.6`) to prevent text clipping
 - **Pixel-Matched Design Elements**:
   - **Genre Chips**: Pill-shaped (`height: 44px`, horizontal padding `20px`, `white-space: nowrap`, `flex: none`, `gap: 8-10px`, hidden scrollbar). Selected = filled teal with white text; unselected = white with thin border `#EAE5DC`. No stray underline bar or clipped text.
   - **Dynamic Clearance**: Dynamic bottom clearance for scrollable pages (`calc(9.5rem + env(safe-area-inset-bottom))` when the floating mini player is visible) so buttons like **"Submit story"** on Upload and story rows on Home are never hidden behind the nav or player.
@@ -26,7 +26,7 @@ A warm, community-driven web application dedicated to authentic Telugu audio sto
 
 ---
 
-## 🏗️ Real Multi-User Backend Architecture (Part B)
+## ðŸ—ï¸ Real Multi-User Backend Architecture (Part B)
 
 The application provides a unified backend supporting both live Supabase PostgreSQL and a high-performance in-process synchronized store for simultaneous multi-user testing:
 
@@ -37,7 +37,7 @@ The application provides a unified backend supporting both live Supabase Postgre
    - Test account creation script: `node scripts/create-user.mjs --role narrator --name "Storyteller"`.
 
 2. **Row Level Security (RLS)**:
-   - Full migration in `supabase/migrations/20261110000000_kathalu_production_schema.sql`.
+   - Full migration in `supabase/migrations/20261115000000_kathalu_full_schema.sql`.
    - Tables: `profiles`, `stories`, `payments`, `upload_credits`, `votes`, `weekly_winners`, `story_reports`, `notifications`.
    - Policies: Public can only view `live` stories; narrators read/edit only their own; only admins approve, reject, and confirm weekly winners.
 
@@ -46,7 +46,7 @@ The application provides a unified backend supporting both live Supabase Postgre
    - `story-covers` bucket: 5MB max file size, image MIME enforcement.
    - Server-side validation via `/api/storage/upload`.
 
-4. **Razorpay Payments (₹20 Entry Fee)**:
+4. **Razorpay Payments (â‚¹20 Entry Fee)**:
    - Order creation via `/api/razorpay/create-order`.
    - Verified HMAC SHA256 signature webhook at `/api/razorpay/webhook`.
    - Idempotency: Duplicate payment events never double-credit.
@@ -55,7 +55,7 @@ The application provides a unified backend supporting both live Supabase Postgre
 5. **Upload & Free Resubmission**:
    - In-browser recording with `MediaRecorder` + live waveform + timer + preview.
    - File upload fallback for iOS Safari and pre-recorded audio.
-   - Consumes 1 credit per submission; rejected stories can be resubmitted for free without paying ₹20 again.
+   - Consumes 1 credit per submission; rejected stories can be resubmitted for free without paying â‚¹20 again.
 
 6. **Weekly Winner & Tally**:
    - Strict 1 vote per account per story per IST week (Asia/Kolkata).
@@ -68,7 +68,7 @@ The application provides a unified backend supporting both live Supabase Postgre
 
 ---
 
-## 🧪 Automated Test Suites
+## ðŸ§ª Automated Test Suites
 
 ### 1. Vitest Unit & Integration Tests (15 tests)
 ```bash
@@ -99,7 +99,7 @@ Verifies:
 
 ---
 
-## 🚀 Local Run Instructions
+## ðŸš€ Local Run Instructions
 
 ### 1. Install Dependencies
 ```bash
@@ -127,11 +127,11 @@ npm start
 
 ---
 
-## 🌐 Staging Deployment Guide (Vercel + Supabase)
+## ðŸŒ Staging Deployment Guide (Vercel + Supabase)
 
 ### Step 1: Deploy to Supabase
 1. Create a project at [supabase.com](https://supabase.com).
-2. In the Supabase SQL Editor, run `supabase/migrations/20261110000000_kathalu_production_schema.sql`.
+2. In the Supabase SQL Editor, run `supabase/migrations/20261115000000_kathalu_full_schema.sql`.
 3. In Storage, ensure `story-audio` and `story-covers` buckets are created.
 
 ### Step 2: Deploy to Vercel
@@ -149,7 +149,7 @@ npm start
 4. Deploy.
 
 ### Step 3: Razorpay Webhook Configuration
-1. Open Razorpay Dashboard → Settings → Webhooks.
+1. Open Razorpay Dashboard â†’ Settings â†’ Webhooks.
 2. Add Webhook URL: `https://<your-vercel-domain>.vercel.app/api/razorpay/webhook`.
 3. Select events: `order.paid`, `payment.captured`.
 4. Enter the same `RAZORPAY_WEBHOOK_SECRET` configured in Vercel.
@@ -171,10 +171,34 @@ In `vercel.json` or your cron scheduler:
 
 ---
 
-## ⚠️ Known Limitations
+## âš ï¸ Known Limitations
 
 1. **In-Browser Audio Recording on Older iOS Safari**: Some older iOS webviews restrict the Web Audio API or `MediaRecorder` without prior user tap. The app includes a prominent **"Upload a file instead"** fallback button for complete compatibility.
 2. **Razorpay Test Mode**: In test mode, actual credit cards / UPI are not debited. Use test UPI ID `success@razorpay` or test cards.
 3. **SMS OTP Gateway**: When `ENABLE_REAL_SMS=false`, any 6-digit OTP will be validated with `123456` in testing mode so beta testers do not consume SMS credits.
 #   S a h i t y a k a l a s a m  
  
+
+
+---
+
+## 🗳️ Voting Model & Weekly Competition Lifecycle
+
+Kathalu employs an authentic **Weekly Community Voting Model** designed for fair creator discovery:
+
+1. **Weekly Cycle Window**:
+   - Each competition week runs from **Monday 00:00:00 IST to Sunday 23:59:59 IST** (`Asia/Kolkata` timezone).
+   - Server-computed week boundary: `v_week_start := (date_trunc('week', NOW() AT TIME ZONE 'Asia/Kolkata'))::DATE;`.
+
+2. **One Vote Per User Per Story Per Week**:
+   - Authenticated listeners can cast exactly **one vote per story per week** (`UNIQUE(story_id, user_id, week_start)`).
+   - Listeners can toggle their vote on and off during the active week.
+   - Advisory transaction locking (`pg_advisory_xact_lock`) serializes concurrent toggles per user and per story, preventing race conditions.
+
+3. **Current Active Week vs All-Time Metrics**:
+   - **`stories.vote_count`**: Represents the **active competition week votes**. This powers:
+     - Home tab "🔥 Most Voted" sorting and trending list
+     - Real-time "Story of the Week" contender ranking
+     - Weekly shortlist for editorial review
+   - **`weekly_winners` Archive**: At the close of each week, the `tally_weekly_winners` job snapshots the winner, sets `stories.is_weekly_winner = true`, and archives the winning vote tally permanently.
+   - **Profile All-Time Metrics**: Narrator profiles display their full published story catalog and aggregate listener engagement.
